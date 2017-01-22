@@ -2,9 +2,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-//This code has been created by his Lord Supreme, his most Holiness and all that is good in our world,
-//our God-Emperor Calum Bucknall, First of his Name, Lord of All Humanity, The Alpha and Omega.
-//He who brings light to our miserable lives, the very essence of Good.
+//This code has been created by the Lord Supremes. They, the most Holy and all that is good in our world,
+//our God-Emperors Darren and Jay, First of their Names, Lords of All Humanity, The Alphas and Omegas.
+//They who brought light to Calums miserable life.
 public class PlayerMovement : MonoBehaviour {
     
     [SerializeField]

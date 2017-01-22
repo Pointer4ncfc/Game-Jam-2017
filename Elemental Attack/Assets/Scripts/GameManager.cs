@@ -16,11 +16,11 @@ public class GameManager : MonoBehaviour
     public Collider[] ceilings;
     [Header("Scripts")]
     [SerializeField]
-    PlayerMovement player1script;
+    public PlayerMovement player1script;
     public GameObject player1prefab;
     public Vector3 player1start;
     [SerializeField]
-    PlayerMovement player2script;
+    public PlayerMovement player2script;
     public GameObject player2prefab;
     public Vector3 player2start;
 
