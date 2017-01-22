@@ -32,22 +32,16 @@ public class GameManager : MonoBehaviour
         p1Score.text = ("Player 1 : " + player1Score);
         p2Score.text = ("Player 2 : " + player2Score);
 
-        if(player1script.playerDead) {
-            Destroy(player2script.gameObject);
-            Instantiate(player1prefab, player1start, Quaternion.identity);
-            Instantiate(player2prefab, player2start, Quaternion.identity);
-            player1script = GameObject.Find("Player 1(Clone)").GetComponent<PlayerMovement>();
-            player2script = GameObject.Find("Player 2(Clone)").GetComponent<PlayerMovement>();
-        }
-        if(player2script.playerDead) {
-            Destroy(player1script.gameObject);
-            Instantiate(player1prefab, player1start, Quaternion.identity);
-            Instantiate(player2prefab, player2start, Quaternion.identity);
-            player1script = GameObject.Find("Player 1(Clone)").GetComponent<PlayerMovement>();
-            player2script = GameObject.Find("Player 2(Clone)").GetComponent<PlayerMovement>();
+        if(player1script.playerDead || player2script.playerDead || (player1script.playerDead && player2script.playerDead)) {
+			//Ragdoll
+			//After animation
+			player1script.gameObject.transform.position = player1start;
+			player2script.gameObject.transform.position = player2start;
+			player1script.playerDead = false;
+			player2script.playerDead = false;
         }
     }
     //Allows the private scores to be set externally
-    public int Player1Score { get; set; }
-    public int Player2Score { get; set; }
+    public int Player1Score { get { return player1Score; } set { player1Score += value; } }
+    public int Player2Score { get { return player2Score; } set { player2Score += value; } }
 }

@@ -24,27 +24,31 @@ public class PlayerMovement : MonoBehaviour {
     public float rotateRight;
     [Header("Bools")]
     public bool playerDead = false;
-    [SerializeField]
     //States if the player is on solid ground
     bool onGround;
-    [SerializeField]
     //States if the player has taken their second jump
     bool secondJump;
-    [SerializeField]
     //States if the player is on a wall
     bool onWall;
     bool facingLeft;
     bool facingRight;
+	public bool fire;
+	public bool ice;
+	public bool earth;
+	public bool air;
     [Header("Strings")]
     public string Horizontal;
     public string Vertical;
     [Header("Key Codes")]
-    public KeyCode throwAmmo;
+    public KeyCode attack;
     public KeyCode jump;
     [Header("Attacks")]
     public GameObject ammo;
     public Transform throwPoint;
     public GameObject ammoClone;
+	public GameObject airBlock;
+	public GameObject stoneBlock;
+	public GameObject fireDab;
 
     void Start() {
         //Sets the GameManager script  
@@ -101,25 +105,46 @@ public class PlayerMovement : MonoBehaviour {
             }
         }
         //Press that fire button? Shit's getting instantiated at the throw point
-        if (Input.GetKeyDown(throwAmmo)) {
-            GameObject ammoClone = (GameObject)Instantiate(ammo, throwPoint.position, throwPoint.rotation);
+        if (Input.GetKeyDown(attack)) {
+			if (ice) {
+				GameObject ammoClone = (GameObject)Instantiate(ammo, throwPoint.position, throwPoint.rotation);
+			}
+			if (fire) {
+				float startX = gameObject.transform.position.x;
+				//GameObject fireClone = (GameObject)Instantiate(fireDab, throwPoint.position, throwPoint.rotation);
+				//fireClone.transform.parent = gameObject.transform;
+				if(gameObject.transform.position.x <= startX + 30) {
+					theRB.velocity = new Vector2(40 * transform.localScale.x, 0);
+				}
 
+			}
+			if (earth && onGround) {
+				GameObject earthClone = (GameObject)Instantiate(stoneBlock, new Vector3(throwPoint.position.x, throwPoint.position.y - 5, throwPoint.position.z), Quaternion.Euler(0,0,0));
+			}
+			if (air) {
+				GameObject airClone = (GameObject)Instantiate(airBlock, throwPoint.position, throwPoint.rotation);
 
+			}
         }
+
     }
     //#Triggered
     //If the object is an attack, like the bullets, you dead
     void OnTriggerEnter(Collider col) {
-        if (col.gameObject.tag == "Attack") {
+        if (col.gameObject.tag == "Attack" || col.gameObject.tag == "Death") {
             playerDead = true;
-            Destroy(gameObject);
             //Keeping tabs on your kill counts
             if(playerNo == 1) {
+				Debug.Log("Player 1 is Dead");
                 gm.Player2Score = 1;
             }
             if (playerNo == 2) {
+				Debug.Log("Player 2 is Dead");
                 gm.Player1Score = 1;
             }
+			if(col.gameObject.tag == "Air") {
+
+			}
         }
     }
     //Lets shit outside the script check which way the player's facing

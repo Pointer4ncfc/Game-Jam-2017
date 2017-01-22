@@ -19,9 +19,9 @@ public class CharacterSwitch : MonoBehaviour
     Renderer rend;
     
     //Allows us to switch between the elements without resorting to booleans
-    enum Element { fire, ice, earth, air };
+    public enum Element { fire, ice, earth, air };
     //element is the currently selected element
-    Element element;
+    public Element element;
 
 
     void Start () {
@@ -49,11 +49,38 @@ public class CharacterSwitch : MonoBehaviour
         if (Input.GetKeyDown(earthKey)) {
             Earth();
         }
+		if(element == Element.air) {
+		player.air = true;
+		player.fire = false;
+		player.earth = false;
+		player.ice = false;
+
+		}
+		if(element == Element.fire) {
+		player.air = false;
+		player.fire = true;
+		player.earth = false;
+		player.ice = false;
+
+		}
+		if(element == Element.ice) {
+		player.air = false;
+		player.fire = false;
+		player.earth = false;
+		player.ice = true;
+
+		}
+		if(element == Element.earth) {
+		player.air = false;
+		player.fire = false;
+		player.earth = true;
+		player.ice = false;
+
+		}
     }
     //Sets the active element for the player
     void Air() {
         element = Element.air;
-        //Draws on the states and stateMats arrays that currently hold them
         mesh = states[0].GetComponent<MeshFilter>().sharedMesh;
         rend.sharedMaterial = stateMats[0];
     }

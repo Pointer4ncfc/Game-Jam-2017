@@ -10,11 +10,16 @@ public class Ammo : MonoBehaviour {
     public float speedLeft;
     public float ammoSpeed;
     private Rigidbody theRB;
+	[SerializeField]
     bool fired;
 
-    float time = 0;
+	float startHeight;
 
+    float time = 0;
+	public float timer;
+	[SerializeField]
     PlayerMovement player1;
+	[SerializeField]
     PlayerMovement player2;
     GameManager gm;
 
@@ -22,14 +27,13 @@ public class Ammo : MonoBehaviour {
     void Start () {
         theRB = GetComponent<Rigidbody>();
         gm = GameObject.Find("Main Camera").GetComponent<GameManager>();
-        //Gets the PlayerMovement scripts from the player objects
-        if (gm.Player1Score == 0 && gm.Player2Score == 0) {
+		//Gets the PlayerMovement scripts from the player objects
+		{
             player1 = GameObject.Find("Player 1").GetComponent<PlayerMovement>();
             player2 = GameObject.Find("Player 2").GetComponent<PlayerMovement>();
-        } else {
-            player1 = GameObject.Find("Player 1(Clone)").GetComponent<PlayerMovement>();
-            player2 = GameObject.Find("Player 2(Clone)").GetComponent<PlayerMovement>();
         }
+		startHeight = gameObject.transform.position.y;
+		Debug.Log(startHeight);
     }
 
     void Update()
@@ -38,7 +42,7 @@ public class Ammo : MonoBehaviour {
         time += Time.deltaTime;
         
         //If the bullet is fired by player 1
-        if (gameObject.name == "Ammo(Clone)") {
+        if (gameObject.name == "Ammo(Clone)" || gameObject.name == "AirWall(Clone)") {
             //If the player is facing right
             if (player1.FacingRight == true && !fired) {
                 //The ammo is set to fire right
@@ -51,7 +55,7 @@ public class Ammo : MonoBehaviour {
             }
         }
         //The above, but for player 2
-        if (gameObject.name == "Ammo 1(Clone)") {
+        if (gameObject.name == "Ammo 1(Clone)" || gameObject.name == "AirWall 1(Clone)") {
             if (player2.FacingRight == true && !fired) {
                 ammoSpeed = speedRight;
                 fired = true;
@@ -62,10 +66,21 @@ public class Ammo : MonoBehaviour {
             }
         }
         //When time reaches 3 seconds, it destroys itself
-        if (time >= 3)
+        if (time >= timer)
             Destroy(gameObject);
         //Sets the velocity of the ammo
-        theRB.velocity = new Vector2(ammoSpeed * transform.localScale.x, 0);
+		if(gameObject.name == "Ammo(Clone)" || gameObject.name == "Ammo 1(Clone)") {
+			theRB.velocity = new Vector2(ammoSpeed * transform.localScale.x, 0);
+		}
+		if(gameObject.name == "AirWall(Clone)" || gameObject.name == "AirWall 1(Clone)") {
+			theRB.velocity = new Vector2(ammoSpeed * transform.localScale.x, 0);
+		}
+
+		if(gameObject.name == "Stone(Clone)" || gameObject.name == "Stone 1(Clone)") {
+			Debug.Log("Rock Block");
+			if(gameObject.transform.position.y <= startHeight + 4)
+				transform.Translate(0, 1, 0);
+		}
     }
     //If the ammo collides with anything, it's destroyed
     private void OnTriggerEnter(Collider other) {
