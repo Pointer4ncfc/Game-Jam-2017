@@ -14,16 +14,26 @@ public class Ammo : MonoBehaviour {
 
     float time = 0;
 
+    PlayerMovement player1;
+    PlayerMovement player2;
+    GameManager gm;
+
 
     void Start () {
         theRB = GetComponent<Rigidbody>();
-	}
+        gm = GameObject.Find("Main Camera").GetComponent<GameManager>();
+        //Gets the PlayerMovement scripts from the player objects
+        if (gm.Player1Score == 0 && gm.Player2Score == 0) {
+            player1 = GameObject.Find("Player 1").GetComponent<PlayerMovement>();
+            player2 = GameObject.Find("Player 2").GetComponent<PlayerMovement>();
+        } else {
+            player1 = GameObject.Find("Player 1(Clone)").GetComponent<PlayerMovement>();
+            player2 = GameObject.Find("Player 2(Clone)").GetComponent<PlayerMovement>();
+        }
+    }
 
     void Update()
     {
-        //Gets the PlayerMovement scripts from the player objects
-        PlayerMovement player1 = GameObject.Find("Player 1").GetComponent<PlayerMovement>();
-        PlayerMovement player2 = GameObject.Find("Player 2").GetComponent<PlayerMovement>();
         //Counts time since creation of the ammo
         time += Time.deltaTime;
         
