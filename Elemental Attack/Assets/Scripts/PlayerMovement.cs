@@ -50,6 +50,10 @@ public class PlayerMovement : MonoBehaviour {
 	public GameObject stoneBlock;
 	public GameObject fireDab;
 
+	public Animator ani;
+
+	float time;
+
     void Start() {
         //Sets the GameManager script  
         gm = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GameManager>();  
@@ -70,24 +74,29 @@ public class PlayerMovement : MonoBehaviour {
                 Debug.Log("KeyCode down: " + kcode);
         }
     }
-    //Everythings says do physics in fixedUpdate, so that's what I did
-    void FixedUpdate() {
-        if (onWall)
-            secondJump = false;
-        //If jump is pressed and the player is either on the ground, or is in the air with their second jump unused
-        if (Input.GetKeyDown(jump) && (onGround || !onGround && !secondJump)) {
-            //Sets the force of the jump
-            theRB.velocity = new Vector2(theRB.velocity.x, jumpForce);
-            //If the player jumps while not on the ground, this will use their second jump
-            if (!onGround) {
-                secondJump = true;
-            }
-        }
-        //Movement. Leave alone. Play with the variables in the inspector
-        float translationX = Input.GetAxis(Horizontal) * speed;
-        float translationY = Input.GetAxis(Vertical) * speed;
+	//Everythings says do physics in fixedUpdate, so that's what I did
+	void FixedUpdate() {
+		if (onWall)
+			secondJump = false;
+		//If jump is pressed and the player is either on the ground, or is in the air with their second jump unused
+		if (Input.GetKeyDown(jump) && (onGround || !onGround && !secondJump)) {
+			//Sets the force of the jump
+			theRB.velocity = new Vector2(theRB.velocity.x, jumpForce);
+			//If the player jumps while not on the ground, this will use their second jump
+			if (!onGround) {
+				secondJump = true;
+			}
+		}
+		//Movement. Leave alone. Play with the variables in the inspector
+		float translationX = Input.GetAxis(Horizontal) * speed;
+		float translationY = Input.GetAxis(Vertical) * speed;
 
-        transform.Translate(translationX, translationY, 0);
+		transform.Translate(translationX, translationY, 0);
+		if (translationX > 0 || translationX < 0) {
+			ani.SetBool("Running", true);
+		} else {
+			ani.SetBool("Running", false);
+		}
 
         if (facingLeft) {
             if (translationX >= rotateRight) {
@@ -107,9 +116,11 @@ public class PlayerMovement : MonoBehaviour {
         //Press that fire button? Shit's getting instantiated at the throw point
         if (Input.GetKeyDown(attack)) {
 			if (ice) {
+				ani.SetTrigger("IA");
 				GameObject ammoClone = (GameObject)Instantiate(ammo, throwPoint.position, throwPoint.rotation);
 			}
 			if (fire) {
+				ani.SetTrigger("Fire");
 				float startX = gameObject.transform.position.x;
 				//GameObject fireClone = (GameObject)Instantiate(fireDab, throwPoint.position, throwPoint.rotation);
 				//fireClone.transform.parent = gameObject.transform;
@@ -119,9 +130,11 @@ public class PlayerMovement : MonoBehaviour {
 
 			}
 			if (earth && onGround) {
+				ani.SetTrigger("Earth");
 				GameObject earthClone = (GameObject)Instantiate(stoneBlock, new Vector3(throwPoint.position.x, throwPoint.position.y - 5, throwPoint.position.z), Quaternion.Euler(0,0,0));
 			}
 			if (air) {
+				ani.SetTrigger("IA");
 				GameObject airClone = (GameObject)Instantiate(airBlock, throwPoint.position, throwPoint.rotation);
 
 			}

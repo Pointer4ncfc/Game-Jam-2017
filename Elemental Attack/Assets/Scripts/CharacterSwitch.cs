@@ -11,6 +11,7 @@ public class CharacterSwitch : MonoBehaviour
     [Header("Arrays")]
     public GameObject[] states;
     public Material[] stateMats;
+	public GameObject dicks;
 
     [SerializeField]
     PlayerMovement player;
@@ -83,23 +84,31 @@ public class CharacterSwitch : MonoBehaviour
         element = Element.air;
         mesh = states[0].GetComponent<MeshFilter>().sharedMesh;
         rend.sharedMaterial = stateMats[0];
+		Renderer dick = dicks.GetComponent<Renderer>();
+		dick.material = stateMats[0];
     }
 
     void Fire() {
         element = Element.fire;
         mesh = states[2].GetComponent<MeshFilter>().sharedMesh;
         rend.sharedMaterial = stateMats[2];
+		Renderer dick = dicks.GetComponent<Renderer>();
+		dick.material = stateMats[2];
     }
 
     void Ice() {
         element = Element.ice;
         mesh = states[3].GetComponent<MeshFilter>().sharedMesh;
         rend.sharedMaterial = stateMats[3];
+		Renderer dick = dicks.GetComponent<Renderer>();
+		dick.material = stateMats[3];
     }
 
     void Earth() {
         element = Element.earth;
         mesh = states[1].GetComponent<MeshFilter>().sharedMesh;
         rend.sharedMaterial = stateMats[1];
+		Renderer dick = dicks.GetComponent<Renderer>();
+		dick.material = stateMats[1];
     }
 }
